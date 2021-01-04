@@ -3,10 +3,15 @@ Title: R implentation of USFS Research Paper NC-250: Tree Volume and Biomass
     Equations for the Lake States
 Version: 0.1.0
 Authors@R: 
-    person(given = "Henry",
-           family = "Rodman",
-           role = c("aut", "cre"),
-           email = "henry@silviaterra.com")
+    c(
+        person(
+            given = "Henry",
+            family = "Rodman",
+            role = c("aut", "cre"),
+            email = "henry@silviaterra.com"
+        ),
+        person("SilviaTerra", role = c("cph", "fnd"))
+    )
 Description: R implentation of USFS Research Paper NC-250: Tree Volume and
     Biomass Equations for the Lake States
 License: MIT + file LICENSE
