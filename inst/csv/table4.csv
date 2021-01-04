@@ -1,0 +1,43 @@
+species,stump_coef,bark_b0,bark_b1,biomass_lbs_per_ft3
+jack pine,0.007017,91.227,0.325,50
+red pine,0.007176,90.365,0.325,42
+white pine,0.008269,88.582,0.325,36
+ponderosa pine,0.007176,90.365,0.325,42
+white spruce,0.010699,99.669,0.325,35
+black spruce,0.008877,100.1,0.325,32
+balsam fir,0.009967,97.52,0.325,45
+eastern hemlock,0.008579,88.582,0.325,50
+tamarack,0.008877,102.56,0.325,47
+eastern redcedar,0.008877,100.08,0.325,28
+northern white-cedar,0.011946,100.08,0.325,28
+other softwoods,0.008877,91.227,0.325,43
+select white oak,0.009727,87.433,0.325,62
+select red oak,0.008908,90.051,0.325,62
+other red oak,0.00898,89.543,0.325,63
+select hickory,0.00898,85.094,0.597,63
+other hickory,0.00898,85.094,0.597,63
+American basswood,0.009639,88.054,0.325,43
+American beech,0.010202,94.853,0.325,50
+yellow birch,0.009968,92.943,0.325,57
+sugar maple,0.008894,93.164,0.325,56
+soft maple,0.008476,94.853,0.325,48
+elm,0.010422,91.894,0.325,54
+black ash,0.011016,91.834,0.325,49
+white and green ash,0.008728,91.834,0.325,49
+American sycamore,0.00898,89.579,0.325,50
+eastern cottonwood,0.011145,91.894,0.325,54
+willow,0.011145,91.894,0.325,54
+hackberry,0.010422,91.894,0.325,54
+balsam poplar,0.006594,89.579,0.325,40
+bigtooth aspen,0.006594,89.579,0.325,43
+quaking aspen,0.007369,92.838,0.325,43
+paper birch,0.00838,97.285,0.325,50
+river birch,0.00838,97.285,0.325,50
+sweetgum,0.00898,89.579,0.325,50
+tupelo,0.00898,89.579,0.325,50
+black cherry,0.00898,88.688,0.325,52
+black walnut,0.00898,88.688,0.325,52
+butternut,0.00898,88.688,0.325,52
+Yellow-poplar,0.00898,88.688,0.325,52
+other hardwoods,0.00898,89.579,0.325,50
+noncommercial,0.00898,89.579,0.325,50
