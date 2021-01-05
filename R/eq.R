@@ -264,7 +264,15 @@ estimate_biomass <- function(spcd, dbh, site_index, stand_basal_area) {
   )
 
   # total biomass = bole + top
-  bole_weight_tons + top_weight_tons
+  biomass <- bole_weight_tons + top_weight_tons
+
+  # identify trees smaller than 5" dbh
+  small_trees <- dbh < 5
+
+  # substitute alternative values for trees <5" DBH
+  biomass[small_trees] <- 4.8900625 * dbh[small_trees]^2.4323866 * 0.8 / 2000
+
+  return(biomass)
 }
 
 #' Estimate stump volume
