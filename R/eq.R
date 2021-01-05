@@ -183,3 +183,202 @@ apply_volume_eq <- function(dbh, height, b0, b1) {
   b0 + b1 * dbh^2 * height
 
 }
+
+#' Estimate biomass
+#'
+#' Estimate green tons of biomass to a given top diameter following the system
+#' outlined in the original publication. Biomass of the bole (stem + stump),
+#' bark, and top are summed to obtain an estimate of the total biomass.
+#'
+#' @param height optional vector of heights to use for volume computations. If
+#' not provided, heights will be estimated using supplied values for
+#' \code{site_index}, \code{top_dob}, and \code{stand_basal_area} using
+#' \code{\link{estimate_height}}
+#' @inheritParams estimate_height
+#'
+#' @return estimates of biomass in tons
+#' @examples
+#' estimate_biomass(
+#'   spcd = c(541, 371, 95, 73),
+#'   dbh = c(10, 11, 12, 13),
+#'   site_index = c(60, 65, 60, 70),
+#'   top_dob = 4,
+#'   stand_basal_area = 80
+#' )
+#'
+#' # get biomass with pre-specified heights (i.e. total height observations)
+#' estimate_biomass(
+#'   spcd = c(541, 371, 95, 73),
+#'   dbh = c(10, 11, 12, 13),
+#'   height = c(50, 55, 60, 65)
+#' )
+#' @export
+
+estimate_biomass <- function(spcd, dbh, height = NULL, site_index = NULL,
+                             top_dob = NULL, stand_basal_area = NULL) {
+  # if no heights supplied, estimate height to top_dob
+  if (is.null(height)) {
+    height <- estimate_height(
+      spcd = spcd,
+      dbh = dbh,
+      site_index = site_index,
+      top_dob = top_dob,
+      stand_basal_area = stand_basal_area
+    )
+  }
+
+  # gross volume
+  gross_vol_cuft <- estimate_volume(
+    spcd = spce,
+    dbh = dbh,
+    height = height,
+    vol_type = "cuft"
+  )
+
+  # stump volume
+  stump_vol_cuft <- estimate_stump_volume(
+    spcd = spcd,
+    dbh = dbh
+  )
+
+  # species bark correction factor to adjust volume
+  bark_correction_factor <- get_bark_correction_factor(
+    spcd = spcd,
+    dbh = dbh
+  )
+
+  # bark weight
+  bark_weight_lbs <- estimate_bark_weight(
+    gross_vol_cuft = gross_vol_cuft,
+    stump_vol_cuft = stump_vol_cuft,
+    bark_correction_factor = bark_correction_factor
+  )
+
+  # get total bole weight (stem + stump + bark)
+  bole_weight_tons <- estimate_bole_weight(
+    spcd = spcd,
+    gross_vol_cuft = gross_vol_cuft,
+    stump_vol_cuft = stump_vol_cuft,
+    bark_weight_lbs = bark_weight_lbs
+  )
+
+  # get top weight
+  top_weight_tons <- estimate_top_weight(
+    spcd = spcd,
+    bark_weight_lbs = bark_weight_lbs,
+    gross_vol_cuft = gross_vol_cuft
+  )
+
+  # total biomass = bole + top
+  bole_weight_tons + top_weight_tons
+}
+
+#' Estimate stump volume
+#'
+#' Estimate stump volume following equation 3 in the original publication.
+#'
+#' @inheritParams estimate_height
+#'
+#' @return estimates of stump volume in cubic feet
+
+estimate_stump_volume <- function(spcd, dbh) {
+  # assign species_group
+  species_groups <- assign_species_group(spcd)
+
+  # get coefficients
+  match_idx <- match(species_groups, rpnc250::table4$species_group)
+  coeffs <- rpnc250::table4[match_idx, ][["stump_coef"]]
+
+  assertthat::noNA(coeffs)
+
+  # apply equation
+  coeffs * dbh^2
+}
+
+#' Get bark correction factor
+#'
+#' Compute bark weight correction factor based on species and DBH following
+#' equation 4 in the original publication.
+#'
+#' @inheritParams estimate_height
+#'
+#' @return species-specific bark correction factor values
+
+get_bark_correction_factor <- function(spcd, dbh) {
+  # assign species_group
+  species_groups <- assign_species_group(spcd)
+
+  # get coefficients
+  match_idx <- match(species_groups, rpnc250::table4$species_group)
+  coeffs <- rpnc250::table4[match_idx, ]
+
+  assertthat::noNA(coeffs)
+
+  # compute species correction factor
+  (coeffs$bark_b0 + coeffs$bark_b1 * dbh) / 100
+}
+
+#' Estimate bark weight
+#'
+#' Estimate bark weight in lbs following equation 5 in the original publication.
+#'
+#' @param gross_vol_cuft estimates of gross volume in cubic feet
+#' @param stump_vol_cuft estimates of stump volume in cubic feet
+#' @param bark_correction_factor species-specific bark correction factors
+#' estimated by \code{\link{get_bark_correction_factor}}
+#'
+#' @return estimates of bark weight in pounds
+
+estimate_bark_weight <- function(gross_vol_cuft, stump_vol_cuft,
+                                 bark_correction_factor) {
+
+  (gross_vol_cuft + stump_vol_cuft) * (1.1646 * bark_correction_factor) * 37
+
+}
+
+#' Estimate bole weight
+#'
+#' Estimate bole (stump + stem) weight in tons following equation 6 in the
+#' original publication.
+#'
+#' @param bark_weight_lbs estimates of bark weight in pounds estimated by
+#' \code{\link{estimate_bark_weight}}
+#' @inheritParams estimate_height
+#' @inheritParams estimate_bark_weight
+#'
+#' @return estimates of bole weight in tons
+
+estimate_bole_weight <- function(spcd, gross_vol_cuft, stump_vol_cuft,
+                                 bark_weight_lbs) {
+  # assign species_group
+  species_groups <- assign_species_group(spcd)
+
+  # get coefficients
+  match_idx <- match(species_groups, rpnc250::table4$species_group)
+  coeffs <- rpnc250::table4[match_idx, ][["biomass_lbs_per_ft3"]]
+
+  assertthat::noNA(coeffs)
+
+  # apply equation
+  (bark_weight_lbs + (gross_vol_cuft + stump_vol_cuft) * coeffs) / 2000
+}
+
+#' Estimate top weight
+#'
+#' Estimate top weight in tons following equation 7 in the original publication.
+#'
+#' @inheritParams estimate_bole_weight
+#'
+#' @return estimates of bole weight in tons
+
+estimate_top_weight <- function(spcd, bark_weight_lbs, gross_vol_cuft) {
+  # assign species_group
+  species_groups <- assign_species_group(spcd)
+
+  # get coefficients
+  match_idx <- match(species_groups, rpnc250::table4$species_group)
+  coeffs <- rpnc250::table4[match_idx, ][["biomass_lbs_per_ft3"]]
+
+  # apply equation
+  0.4545 * (bark_weight + gross_vol_cuft * coeffs) / 2000
+}
