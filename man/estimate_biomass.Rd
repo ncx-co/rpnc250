@@ -29,14 +29,7 @@ estimate_biomass(
   spcd = c(541, 371, 95, 73),
   dbh = c(10, 11, 12, 13),
   site_index = c(60, 65, 60, 70),
-  top_dob = 4,
   stand_basal_area = 80
 )
 
-# get biomass with pre-specified heights (i.e. total height observations)
-estimate_biomass(
-  spcd = c(541, 371, 95, 73),
-  dbh = c(10, 11, 12, 13),
-  height = c(50, 55, 60, 65)
-)
 }

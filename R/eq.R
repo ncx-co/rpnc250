@@ -88,7 +88,7 @@ estimate_height <- function(spcd, dbh, site_index, top_dob, stand_basal_area) {
 #' }
 
 apply_height_eq <- function(dbh, site_index, top_dob, stand_basal_area,
-                      b1, b2, b3, b4, b5, b6) {
+                            b1, b2, b3, b4, b5, b6) {
   t_term <- (1.00001 - top_dob / dbh)
 
   # equation 2 from RP NC-250
@@ -198,16 +198,9 @@ apply_volume_eq <- function(dbh, height, b0, b1) {
 #'   spcd = c(541, 371, 95, 73),
 #'   dbh = c(10, 11, 12, 13),
 #'   site_index = c(60, 65, 60, 70),
-#'   top_dob = 4,
 #'   stand_basal_area = 80
 #' )
 #'
-#' # get biomass with pre-specified heights (i.e. total height observations)
-#' estimate_biomass(
-#'   spcd = c(541, 371, 95, 73),
-#'   dbh = c(10, 11, 12, 13),
-#'   height = c(50, 55, 60, 65)
-#' )
 #' @export
 
 estimate_biomass <- function(spcd, dbh, site_index, stand_basal_area) {
@@ -270,7 +263,9 @@ estimate_biomass <- function(spcd, dbh, site_index, stand_basal_area) {
   small_trees <- dbh < 5
 
   # substitute alternative values for trees <5" DBH
-  biomass[small_trees] <- 4.8900625 * dbh[small_trees]^2.4323866 * 0.8 / 2000
+  biomass[small_trees] <- apply_small_tree_biomass_eq(
+    dbh = dbh[small_trees]
+  )
 
   return(biomass)
 }
