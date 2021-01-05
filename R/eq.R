@@ -110,7 +110,7 @@ apply_height_eq <- function(dbh, site_index, top_dob, stand_basal_area,
 #' estimate_volume(
 #'   spcd = c(541, 371, 95, 73),
 #'   dbh = c(10, 11, 12, 13),
-#'   height = 40, 40, 24, 24,
+#'   height = c(40, 40, 24, 24),
 #'   vol_type = "cuft"
 #' )
 #' @export
