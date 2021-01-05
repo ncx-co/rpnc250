@@ -98,10 +98,10 @@ apply_height_eq <- function(dbh, site_index, top_dob, stand_basal_area,
 #'
 #' Estimate volume to specified height along stem in either cubic feet or
 #' International 1/4 board feet. The equation is applied by the function
-#' \code{\link{apply_volume_equation}}
+#' \code{\link{apply_volume_eq}}
 #'
 #' @param vol_type units for volume estimates, either \code{cuft} or
-#' \code {bdft}
+#' \code{bdft}
 #' @param height vector of heights to which to estimate volume
 #' @inheritParams estimate_height
 #'
