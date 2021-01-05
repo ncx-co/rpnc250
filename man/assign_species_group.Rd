@@ -18,5 +18,7 @@ Assign individual FIA species codes to one of the 'Species Groups' as
 described in the original paper.
 }
 \examples{
-assign_species_group(c(541, 371, 95, 73))
+\dontrun{
+  assign_species_group(c(541, 371, 95, 73))
+}
 }

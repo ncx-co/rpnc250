@@ -72,6 +72,7 @@ estimate_height <- function(spcd, dbh, site_index, top_dob, stand_basal_area) {
 #'
 #' @return vector of height estimates
 #' @examples
+#' \dontrun{
 #' apply_height_eq(
 #'   dbh = 10,
 #'   site_index = 60,
@@ -84,6 +85,7 @@ estimate_height <- function(spcd, dbh, site_index, top_dob, stand_basal_area) {
 #'   b5 = table1$b5[1],
 #'   b6 = table1$b6[1]
 #' )
+#' }
 
 apply_height_eq <- function(dbh, site_index, top_dob, stand_basal_area,
                       b1, b2, b3, b4, b5, b6) {
@@ -165,12 +167,14 @@ estimate_volume <- function(spcd, dbh, height, vol_type = c("cuft", "bdft")) {
 #'
 #' @return vector of volume estimates
 #' @examples
+#' \dontrun{
 #' apply_volume_eq(
 #'   dbh = 10,
 #'   height = 40
 #'   b0 = table2$b0[1],
 #'   b1 = table2$b1[1]
 #' )
+#' }
 
 apply_volume_eq <- function(dbh, height, b0, b1) {
 

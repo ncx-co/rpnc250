@@ -35,10 +35,12 @@ Where:
 }
 }
 \examples{
+\dontrun{
 apply_volume_eq(
   dbh = 10,
   height = 40
   b0 = table2$b0[1],
   b1 = table2$b1[1]
 )
+}
 }

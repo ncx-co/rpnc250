@@ -53,6 +53,7 @@ species specific coefficients from Table 1
 }
 }
 \examples{
+\dontrun{
 apply_height_eq(
   dbh = 10,
   site_index = 60,
@@ -65,4 +66,5 @@ apply_height_eq(
   b5 = table1$b5[1],
   b6 = table1$b6[1]
 )
+}
 }
