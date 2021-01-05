@@ -13,7 +13,9 @@ Authors@R:
         person("SilviaTerra", role = c("cph", "fnd"))
     )
 Description: R implentation of USFS Research Paper NC-250: Tree Volume and
-    Biomass Equations for the Lake States
+    Biomass Equations for the Lake States. All equations and model coefficients
+    were copied out of the original publication accessed here:
+    https://www.nrs.fs.fed.us/pubs/rp/rp_nc250.pdf.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
