@@ -55,7 +55,7 @@ estimate_height <- function(spcd, dbh, site_index, top_dob, stand_basal_area) {
 #'
 #' @param b1,b2,b3,b4,b5,b6 numeric vector of model coefficients from Table 1
 #' @inheritParams estimate_height
-#' 
+#'
 #' @return vector of height estimates
 #' @examples
 #' height_eq(
@@ -73,9 +73,9 @@ estimate_height <- function(spcd, dbh, site_index, top_dob, stand_basal_area) {
 
 apply_height_eq <- function(dbh, site_index, top_dob, stand_basal_area,
                       b1, b2, b3, b4, b5, b6) {
-  T <- (1.00001 - top_dob / dbh)
+  t_term <- (1.00001 - top_dob / dbh)
 
   # equation 2 from RP NC-250
-  4.5 + b1 * (1 - exp(-b2 * dbh))^b3 * site_index^b4 * T^b5 *
+  4.5 + b1 * (1 - exp(-b2 * dbh))^b3 * site_index^b4 * t_term^b5 *
     stand_basal_area^b6
 }
