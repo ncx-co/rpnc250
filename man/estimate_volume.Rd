@@ -14,7 +14,7 @@ estimate_volume(spcd, dbh, height, vol_type = c("cuft", "bdft"))
 \item{height}{vector of heights to which to estimate volume}
 
 \item{vol_type}{units for volume estimates, either \code{cuft} or
-\code {bdft}}
+\code{bdft}}
 }
 \value{
 vector of volume estimates
@@ -22,13 +22,16 @@ vector of volume estimates
 \description{
 Estimate volume to specified height along stem in either cubic feet or
 International 1/4 board feet. The equation is applied by the function
-\code{\link{apply_volume_equation}}
+\code{\link{apply_volume_eq}}.
+}
+\details{
+Note: this function returns gross volume (not net volume).
 }
 \examples{
 estimate_volume(
   spcd = c(541, 371, 95, 73),
   dbh = c(10, 11, 12, 13),
-  height = 40, 40, 24, 24,
+  height = c(40, 40, 24, 24),
   vol_type = "cuft"
 )
 }
