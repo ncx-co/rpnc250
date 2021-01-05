@@ -334,7 +334,7 @@ get_bark_correction_factor <- function(spcd, dbh) {
 estimate_bark_weight <- function(gross_vol_cuft, stump_vol_cuft,
                                  bark_correction_factor) {
 
-  (gross_vol_cuft + stump_vol_cuft) * (1.1646 * bark_correction_factor) * 37
+  (gross_vol_cuft + stump_vol_cuft) * (1.1646 - bark_correction_factor) * 37
 
 }
 
