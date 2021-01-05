@@ -97,3 +97,22 @@
 #' }
 #' @source data-raw/tables.R
 "table4"
+
+#' test_trees
+#'
+#' A dataframe containing a sample of measured trees from FIA plots in northern
+#' Minnesota.
+#'
+#' @format dataframe:
+#' \describe{
+#'   \item{cn}{tree cn}
+#'   \item{plt_cn}{plot cn}
+#'   \item{statuscd}{tree status code: 0 = dead, 1 = alive}
+#'   \item{spcd}{numeric FIA species code}
+#'   \item{common_name}{species common name}
+#'   \item{dbh}{diameter at breast height in inches}
+#'   \item{tpa_unadj}{trees per acre expansion factor for plot_cn}
+#'   \item{volcfgrs}{gross cubic foot volume as computed by FIA}
+#' }
+#' @source data-raw/test_trees.R
+"test_trees"
