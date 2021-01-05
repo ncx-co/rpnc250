@@ -377,5 +377,21 @@ estimate_top_weight <- function(spcd, bark_weight_lbs, gross_vol_cuft) {
   coeffs <- rpnc250::table4[match_idx, ][["biomass_lbs_per_ft3"]]
 
   # apply equation
-  0.4545 * (bark_weight + gross_vol_cuft * coeffs) / 2000
+  0.4545 * (bark_weight_lbs + gross_vol_cuft * coeffs) / 2000
+}
+
+#' Apply small tree biomass equation
+#' 
+#' Apply the equation used for estimating biomass in trees less than 5" DBH
+#' 
+#' @inheritParams estimate_biomass
+#' 
+#' @return vector of biomass estimates in tons
+#' @examples
+#' \dontrun{
+#' apply_small_tree_biomass_eq(4)
+#' }
+
+apply_small_tree_biomass_eq <- function(dbh) {
+  4.8900625 * dbh^2.4323866 * 0.8 / 2000
 }
