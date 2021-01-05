@@ -18,6 +18,8 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
+    assertthat,
+    dplyr,
     tidyFIA
 Remotes:
     SilviaTerra/tidyFIA
