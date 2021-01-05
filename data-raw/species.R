@@ -1,8 +1,5 @@
 library(tidyverse)
 
-# species groups are present in all of the tables
-table1 <- vroom::vroom("inst/csv/table1.csv")
-
 # get ref_species table from FIA
 ref_species <- tidyFIA::ref_tables[["species"]] %>%
   transmute(
@@ -17,16 +14,17 @@ species_list <- list(
   "Jack pine" = "Pinus banksiana",
   "Red pine" = "Pinus resinosa",
   "White pine" = "Pinus strobus",
+  "Ponderosa pine" = "Pinus ponderosa",
   "White spruce" = "Picea glauca",
   "Black spruce" = "Picea mariana",
   "Balsam fir" = "Abies balsamea",
   "Hemlock" = "Tsuga canadensis",
   "Tamarack" = "Larix laricina",
   "Northern white-cedar" = "Thuja occidentalis",
+  "Eastern redcedar" = "Juniperus virginiana",
   "Other softwoods" = c(
     "Pinus sylvestris",
     "Pinus nigra",
-    "Juniperus virginiana",
     "Larix decidua",
     "Picea abies",
     "Pseudotsuga menziesii"
@@ -87,7 +85,7 @@ species_list <- list(
   "Other hardwoods" = c(
     "Acer negundo"
   ),
-  "Noncommercial species" = c(
+  "Noncommercial spp." = c(
     "Acer pensylvanicum",
     "Acer spicatum",
     "Ailanthus altissima", # Adanthus altessimor in paper
