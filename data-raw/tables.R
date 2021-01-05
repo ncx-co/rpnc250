@@ -48,7 +48,8 @@ table4 <- vroom::vroom("inst/csv/table4.csv") %>%
 assertthat::assert_that(check_reference_tables(table4))
 
 # add to package data
-usethis::use_data(table1, overwrite = TRUE)
-usethis::use_data(table2, overwrite = TRUE)
-usethis::use_data(table3, overwrite = TRUE)
-usethis::use_data(table4, overwrite = TRUE)
+usethis::use_data(table1, overwrite = TRUE, internal = FALSE)
+usethis::use_data(table2, overwrite = TRUE, internal = FALSE)
+usethis::use_data(table3, overwrite = TRUE, internal = FALSE)
+usethis::use_data(table4, overwrite = TRUE, internal = FALSE)
+
