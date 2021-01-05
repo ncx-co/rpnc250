@@ -1,7 +1,8 @@
 #' Estimate height
 #'
 #' Estimate height to a given top diameter given species, diameter, site index,
-#' and stand basal area
+#' and stand basal area. The height equation is applied by the function
+#' \code{\link{apply_height_eq}}.
 #'
 #' @param spcd vector of FIA species codes
 #' @param dbh vector of DBH observations in inches
@@ -52,13 +53,26 @@ estimate_height <- function(spcd, dbh, site_index, top_dob, stand_basal_area) {
 #' Apply the height equation (eq. 2 in publication) from RP NC-250 using
 #' provided dbh, site index, outside-bark top diameter, stand basal area, and
 #' coefficients from Table 1 in the publication.
+#' 
+#' The height equation is as follows:
+#' \deqn{Height = 4.5 + b_1(1-e^{(-b_2D)})^{b_3}*S^{b_4}*T^{b_5}*B^{b_6}}
+#' 
+#' Where:
+#' \itemize{
+#'   \item \eqn{b_1}, \eqn{b_2}, \eqn{b_3}, \eqn{b_4}, \eqn{b_5}, \eqn{b_6} are
+#'   species specific coefficients from Table 1
+#'   \item \eqn{D} is diameter at breast height in inches
+#'   \item \eqn{S} is site index (base age 50)
+#'   \item \eqn{T} is \eqn{1.00001 - d/D}, \eqn{d} is top diameter outside bark
+#'   \item \eqn{B} is stand basal area in square feet per acre
+#' }
 #'
 #' @param b1,b2,b3,b4,b5,b6 numeric vector of model coefficients from Table 1
 #' @inheritParams estimate_height
 #'
 #' @return vector of height estimates
 #' @examples
-#' height_eq(
+#' apply_height_eq(
 #'   dbh = 10,
 #'   site_index = 60,
 #'   top_dob = 4,

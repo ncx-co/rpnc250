@@ -24,7 +24,8 @@ vector of height estimates
 }
 \description{
 Estimate height to a given top diameter given species, diameter, site index,
-and stand basal area
+and stand basal area. The height equation is applied by the function
+\code{\link{apply_height_eq}}.
 }
 \examples{
 estimate_height(
