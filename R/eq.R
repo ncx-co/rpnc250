@@ -29,8 +29,8 @@ estimate_height <- function(spcd, dbh, site_index, top_dob, stand_basal_area) {
   species_groups <- assign_species_group(spcd)
 
   # get coefficients
-  match_idx <- match(species_groups, table1$species_group)
-  coeffs <- table1[match_idx, ]
+  match_idx <- match(species_groups, rpnc250::table1$species_group)
+  coeffs <- rpnc250::table1[match_idx, ]
 
   # estimate height
   apply_height_eq(
@@ -100,7 +100,9 @@ apply_height_eq <- function(dbh, site_index, top_dob, stand_basal_area,
 #'
 #' Estimate volume to specified height along stem in either cubic feet or
 #' International 1/4 board feet. The equation is applied by the function
-#' \code{\link{apply_volume_eq}}
+#' \code{\link{apply_volume_eq}}.
+#' 
+#' Note: this function returns gross volume (not net volume).
 #'
 #' @param vol_type units for volume estimates, either \code{cuft} or
 #' \code{bdft}
@@ -127,8 +129,8 @@ estimate_volume <- function(spcd, dbh, height, vol_type = c("cuft", "bdft")) {
   # choose coef table 2 or 3 depending on volume type
   coef_table <- switch(
     vol_type,
-    cuft = table2,
-    bdft = table3
+    cuft = rpnc250::table2,
+    bdft = rpnc250::table3
   )
 
   # get coefficients
