@@ -18,7 +18,16 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of rpnc250 is to ...
+The goal of rpnc250 is to provide R functions that produce height, volume, and
+biomass estimates using the equations and coefficients from USFS Research Paper
+NC-250: Tree volume and biomass equations for the Lake States.
+
+Hahn, Jerold T. 1984. Tree volume and biomass equations for the Lake States. 
+Research Paper NC-250. 
+St. Paul, MN: U.S. Dept. of Agriculture, Forest Service, North Central Forest Experiment Station
+
+The original publication can be accessed from the
+[USFS](https://www.fs.usda.gov/treesearch/pubs/10037).
 
 ## Installation
 
@@ -34,21 +43,22 @@ This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 library(rpnc250)
-## basic example code
+library(dplyr)
+library(ggplot2)
+
+trees_with_biomass <- test_trees %>%
+  filter(!is.na(dbh)) %>%
+  mutate(
+    biomass = estimate_biomass(
+      spcd = spcd,
+      dbh = dbh,
+      site_index = 65,
+      stand_basal_area = 75
+    )
+  )
+
+trees_with_biomass %>%
+  ggplot(aes(x = dbh, y = biomass, color = common_name)) +
+  geom_point()
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!

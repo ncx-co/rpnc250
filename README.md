@@ -7,7 +7,17 @@
 
 <!-- badges: end -->
 
-The goal of rpnc250 is to …
+The goal of rpnc250 is to provide R functions that produce height,
+volume, and biomass estimates using the equations and coefficients from
+USFS Research Paper NC-250: Tree volume and biomass equations for the
+Lake States.
+
+Hahn, Jerold T. 1984. Tree volume and biomass equations for the Lake
+States. Research Paper NC-250. St. Paul, MN: U.S. Dept. of Agriculture,
+Forest Service, North Central Forest Experiment Station
+
+The original publication can be accessed from the
+[USFS](https://www.fs.usda.gov/treesearch/pubs/10037).
 
 ## Installation
 
@@ -23,29 +33,23 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(rpnc250)
-## basic example code
+library(dplyr)
+library(ggplot2)
+
+trees_with_biomass <- test_trees %>%
+  filter(!is.na(dbh)) %>%
+  mutate(
+    biomass = estimate_biomass(
+      spcd = spcd,
+      dbh = dbh,
+      site_index = 65,
+      stand_basal_area = 75
+    )
+  )
+
+trees_with_biomass %>%
+  ggplot(aes(x = dbh, y = biomass, color = common_name)) +
+  geom_point()
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub\!
+<img src="man/figures/README-example-1.png" width="100%" />
