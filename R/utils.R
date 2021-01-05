@@ -8,7 +8,9 @@
 #' @return character vector of valid species groups from the tables in the
 #' original publication
 #' @examples
-#' assign_species_group(c(541, 371, 95, 73))
+#' \dontrun{
+#'   assign_species_group(c(541, 371, 95, 73))
+#' }
 
 assign_species_group <- function(spcd) {
   # get hardwood/softwood for each species
