@@ -190,10 +190,6 @@ apply_volume_eq <- function(dbh, height, b0, b1) {
 #' outlined in the original publication. Biomass of the bole (stem + stump),
 #' bark, and top are summed to obtain an estimate of the total biomass.
 #'
-#' @param height optional vector of heights to use for volume computations. If
-#' not provided, heights will be estimated using supplied values for
-#' \code{site_index}, \code{top_dob}, and \code{stand_basal_area} using
-#' \code{\link{estimate_height}}
 #' @inheritParams estimate_height
 #'
 #' @return estimates of biomass in tons
@@ -214,22 +210,20 @@ apply_volume_eq <- function(dbh, height, b0, b1) {
 #' )
 #' @export
 
-estimate_biomass <- function(spcd, dbh, height = NULL, site_index = NULL,
-                             top_dob = NULL, stand_basal_area = NULL) {
-  # if no heights supplied, estimate height to top_dob
-  if (is.null(height)) {
-    height <- estimate_height(
-      spcd = spcd,
-      dbh = dbh,
-      site_index = site_index,
-      top_dob = top_dob,
-      stand_basal_area = stand_basal_area
-    )
-  }
+estimate_biomass <- function(spcd, dbh, site_index, stand_basal_area) {
+  
+  # height to 4" top
+  height <- estimate_height(
+    spcd = spcd,
+    dbh = dbh,
+    site_index = site_index,
+    top_dob = 4,
+    stand_basal_area = stand_basal_area
+  )
 
   # gross volume
   gross_vol_cuft <- estimate_volume(
-    spcd = spce,
+    spcd = spcd,
     dbh = dbh,
     height = height,
     vol_type = "cuft"

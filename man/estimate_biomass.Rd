@@ -4,29 +4,14 @@
 \alias{estimate_biomass}
 \title{Estimate biomass}
 \usage{
-estimate_biomass(
-  spcd,
-  dbh,
-  height = NULL,
-  site_index = NULL,
-  top_dob = NULL,
-  stand_basal_area = NULL
-)
+estimate_biomass(spcd, dbh, site_index, stand_basal_area)
 }
 \arguments{
 \item{spcd}{vector of FIA species codes}
 
 \item{dbh}{vector of DBH observations in inches}
 
-\item{height}{optional vector of heights to use for volume computations. If
-not provided, heights will be estimated using supplied values for
-\code{site_index}, \code{top_dob}, and \code{stand_basal_area} using
-\code{\link{estimate_height}}}
-
 \item{site_index}{vector of site index estimates (base age 50)}
-
-\item{top_dob}{vector of outside-bark diameter values to which height will
-be estimated}
 
 \item{stand_basal_area}{vector of stand-level basal area estimates
 corresponding to the stems}
