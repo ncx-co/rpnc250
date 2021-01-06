@@ -15,7 +15,7 @@
 assign_species_group <- function(spcd) {
   # get hardwood/softwood for each species
   major_group <- rpnc250::ref_species$major_spgrpcd[
-    match(spcd, ref_species$spcd)
+    match(spcd, rpnc250::ref_species$spcd)
     ]
 
   species_groups <- dplyr::case_when(
