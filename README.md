@@ -17,19 +17,22 @@ equations for the Lake States. Research Paper NC-250. St. Paul, MN: U.S.
 Dept. of Agriculture, Forest Service, North Central Forest Experiment
 Station
 
-The original publication can be accessed from the
-[USFS](https://www.fs.usda.gov/treesearch/pubs/10037).
+The original publication can be accessed from the [U.S. Forest
+Service](https://www.fs.usda.gov/treesearch/pubs/10037).
 
 The equations and species-specific coefficients were copied out of the
 PDF version of the publication by Henry Rodman in January 2021. The
-tables are [stored in csv format](inst/csv/) in the R package. The
-functions for estimating height, volume, and biomass have been
+tables are [stored in csv format](inst/csv/) in the R package and have
+been [translated into package data objects](data-raw/tables.R) for use
+in the internal functions.
+
+The functions for estimating height, volume, and biomass have been
 [tested](tests/testthat/test-eq.R) to align with the examples provided
 in the original publication.
 
 ## Installation
 
-You can install the released version of rpnc250 from Github with:
+You can install the latest version of rpnc250 from Github with:
 
 ``` r
 remotes::install_github("SilviaTerra/rpnc250")
@@ -50,18 +53,16 @@ The package has a set of test trees pulled from some FIA data in
 northern Minnesota ([source code](data-raw/test_trees.R)).
 
 ``` r
-tibble::glimpse(test_trees)
-#> Rows: 313
-#> Columns: 9
-#> $ cn          [3m[38;5;246m<chr>[39m[23m "65340991010661", "65340995010661", "65340999010661", "65…
-#> $ plt_cn      [3m[38;5;246m<chr>[39m[23m "65340894010661", "65340894010661", "65340894010661", "65…
-#> $ statuscd    [3m[38;5;246m<int>[39m[23m 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-#> $ spcd        [3m[38;5;246m<dbl>[39m[23m 95, 95, 95, 95, 95, 95, 95, 71, 95, 95, 95, 95, 95, 95, 7…
-#> $ common_name [3m[38;5;246m<chr>[39m[23m "black spruce", "black spruce", "black spruce", "black sp…
-#> $ dbh         [3m[38;5;246m<dbl>[39m[23m 1.5, 1.5, 2.8, 1.9, 2.7, 2.0, 2.0, 2.6, 3.1, 1.5, 1.5, 2.…
-#> $ tpa_unadj   [3m[38;5;246m<dbl>[39m[23m 74.965282, 74.965282, 74.965282, 74.965282, 74.965282, 74…
-#> $ ht          [3m[38;5;246m<int>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-#> $ volcfgrs    [3m[38;5;246m<dbl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+head(test_trees)
+#> # A tibble: 6 x 9
+#>   cn        plt_cn     statuscd  spcd common_name   dbh tpa_unadj    ht volcfgrs
+#>   <chr>     <chr>         <int> <dbl> <chr>       <dbl>     <dbl> <int>    <dbl>
+#> 1 65340991… 653408940…        1    95 black spru…   1.5      75.0    NA       NA
+#> 2 65340995… 653408940…        1    95 black spru…   1.5      75.0    NA       NA
+#> 3 65340999… 653408940…        1    95 black spru…   2.8      75.0    NA       NA
+#> 4 65341003… 653408940…        1    95 black spru…   1.9      75.0    NA       NA
+#> 5 65341007… 653408940…        1    95 black spru…   2.7      75.0    NA       NA
+#> 6 65341011… 653408940…        1    95 black spru…   2        75.0    NA       NA
 ```
 
 The height equation includes stand basal area as a covariate, so we can
