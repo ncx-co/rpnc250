@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/SilviaTerra/rpnc250/workflows/R-CMD-check/badge.svg)](https://github.com/SilviaTerra/rpnc250/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/SilviaTerra/rpnc250/branch/main/graph/badge.svg)](https://codecov.io/gh/SilviaTerra/rpnc250?branch=main)
 <!-- badges: end -->
 
 The goal of rpnc250 is to provide R functions that produce height,

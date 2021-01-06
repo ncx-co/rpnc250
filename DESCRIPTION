@@ -30,5 +30,6 @@ RoxygenNote: 7.1.1
 Depends: 
     R (>= 2.10)
 Suggests: 
-    testthat (>= 2.0.0)
+    testthat (>= 2.0.0),
+    covr
 Config/testthat/edition: 2
