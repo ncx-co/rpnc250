@@ -30,6 +30,5 @@ Depends:
     R (>= 2.10)
 Suggests: 
     testthat (>= 2.0.0),
-    covr,
-    tidyFIA
+    covr
 Config/testthat/edition: 2
