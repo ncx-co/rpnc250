@@ -137,13 +137,18 @@ estimate_volume <- function(spcd, dbh, height, vol_type = c("cuft", "bdft")) {
   match_idx <- match(species_groups, coef_table$species_group)
   coeffs <- coef_table[match_idx, ]
 
-  # estimate height
-  apply_volume_eq(
+  # estimate volume
+  vols <- apply_volume_eq(
     dbh = dbh,
     height = height,
     b0 = coeffs$b0,
     b1 = coeffs$b1
   )
+
+  # set small stem volume to NA
+  vols[dbh < 5] <- NA
+
+  return(vols)
 }
 
 #' Apply volume equation
@@ -393,5 +398,7 @@ estimate_top_weight <- function(spcd, bark_weight_lbs, gross_vol_cuft) {
 #' }
 
 apply_small_tree_biomass_eq <- function(dbh) {
+
   4.8900625 * dbh^2.4323866 * 0.8 / 2000
+
 }
