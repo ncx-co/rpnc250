@@ -5,6 +5,7 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/SilviaTerra/rpnc250/workflows/R-CMD-check/badge.svg)](https://github.com/SilviaTerra/rpnc250/actions)
 <!-- badges: end -->
 
 The goal of rpnc250 is to provide R functions that produce height,
