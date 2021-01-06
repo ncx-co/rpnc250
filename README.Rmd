@@ -22,12 +22,20 @@ The goal of rpnc250 is to provide R functions that produce height, volume, and
 biomass estimates using the equations and coefficients from USFS Research Paper
 NC-250: Tree volume and biomass equations for the Lake States.
 
+Citation for publication:
 Hahn, Jerold T. 1984. Tree volume and biomass equations for the Lake States. 
 Research Paper NC-250. 
 St. Paul, MN: U.S. Dept. of Agriculture, Forest Service, North Central Forest Experiment Station
 
 The original publication can be accessed from the
 [USFS](https://www.fs.usda.gov/treesearch/pubs/10037).
+
+The equations and species-specific coefficients were copied out of the PDF
+version of the publication by Henry Rodman in January 2021. The tables are
+[stored in csv format](inst/csv/) in the R package. The functions for
+estimating height, volume, and biomass have been
+[tested](tests/testthat/test-eq.R) to align with the examples provided in the
+original publication.
 
 ## Installation
 
@@ -37,7 +45,7 @@ You can install the released version of rpnc250 from Github with:
 remotes::install_github("SilviaTerra/rpnc250")
 ```
 
-## Example
+## Examples
 
 Here are some examples to show a few ways to work with the functions:
 
@@ -55,7 +63,8 @@ tibble::glimpse(test_trees)
 
 The height equation includes stand basal area as a covariate, so we can
 summarize FIA plot-level (four subplots combined) basal area to use for that
-purpose.
+purpose. For simplicity, we will assume that site index is constant for all of
+the plot locations.
 
 ```{r basal_area}
 # summarize plot-level basal area
@@ -73,15 +82,8 @@ plot_ba <- test_trees %>%
     .groups = "drop"
   )
 
-```
-
-### Cubic feet
-We can summarize total merchantable volume up to 4" top very easily. First
-we can join the plot-level basal area table to the tree table, then we can 
-estimate height to 4" top for each stem, and finally we can estimate stem-level
-volumes.
-```{r cuft}
-merch_cuft_4 <- test_trees %>%
+# filter the trees and join to plot basal area table
+trees_prepped <- test_trees %>%
   dplyr::filter(
     !is.na(dbh),
     statuscd == 1, # only live trees
@@ -90,7 +92,52 @@ merch_cuft_4 <- test_trees %>%
   dplyr::left_join(
     plot_ba,
     by = "plt_cn"
-  ) %>%
+  )
+```
+
+### Merchantable height
+The height equation in the publication generates estimates of height to a given
+top diameter (outside bark) provided species, DBH (inches), site index, and
+stand basal area.
+
+To estimate height to 4" top we can apply the function `estimate_height`:
+```{r height}
+# clone prepped tree dataframe
+ht_trees <- trees_prepped
+
+ht_trees$height_4 <- estimate_height(
+  spcd = ht_trees$spcd,
+  dbh = ht_trees$dbh,
+  site_index = 65,
+  top_dob = 4,
+  stand_basal_area = ht_trees$bapa
+)
+```
+
+It is also possible to use the functions within `dplyr::mutate` calls which
+facilitates clean data wrangling workflows.
+```{r height_tidy}
+
+ht_trees <- trees_prepped %>%
+  dplyr::mutate(
+    height_4 = estimate_height(
+      spcd = spcd,
+      dbh = dbh,
+      site_index = 65,
+      top_dob = 4,
+      stand_basal_area = bapa
+    )
+  )
+
+```
+
+### Cubic feet
+We can summarize total merchantable volume up to 4" top very easily. First, join
+the plot-level basal area table to the tree table, then estimate height to 4"
+top for each stem. Using those estimates as inputs to the volume equations we
+can estimate stem-level volumes.
+```{r cuft}
+merch_cuft_4 <- trees_prepped %>%
   dplyr::mutate(
     height_4 = estimate_height(
       spcd = spcd,
@@ -107,9 +154,14 @@ merch_cuft_4 <- test_trees %>%
     )
   )
 
+# plot relationship between diameter and gross volume
 merch_cuft_4 %>%
   ggplot2::ggplot(
-    ggplot2::aes(x = dbh, y = gross_cuft_vol, color = common_name)
+    ggplot2::aes(
+      x = dbh,
+      y = gross_cuft_vol,
+      color = common_name
+    )
   ) +
   ggplot2::geom_point() +
   ggplot2::labs(
@@ -121,7 +173,9 @@ merch_cuft_4 %>%
 
 ### Board feet
 To get merchantable volume in board feet (Int'l 1/4) we can set the merchantable
-height to 9" for softwood trees, and 10" for hardwood trees.
+height to 9" for softwood trees, and 10" for hardwood trees. You and I both
+know that the large aspen are probably not destined for sawtimber products, but
+we can dream.
 
 ```{r bdft}
 # make table of spcd and hardwood/softwood assignment
@@ -134,16 +188,7 @@ spp_groups <- tidyFIA::ref_tables[["species"]] %>%
     )
   )
 
-merch_bdft <- test_trees %>%
-  dplyr::filter(
-    !is.na(dbh),
-    statuscd == 1, # only live trees
-    !is.na(tpa_unadj)
-  ) %>%
-  dplyr::left_join(
-    plot_ba,
-    by = "plt_cn"
-  ) %>%
+merch_bdft <- trees_prepped %>%
   dplyr::left_join(
     spp_groups,
     by = "spcd"
@@ -175,35 +220,53 @@ merch_bdft <- test_trees %>%
 
 merch_bdft %>%
   ggplot2::ggplot(
-    ggplot2::aes(x = dbh, y = gross_bdft_vol, color = common_name)
+    ggplot2::aes(
+      x = dbh,
+      y = gross_bdft_vol,
+      color = common_name
+    )
   ) +
   ggplot2::geom_point() +
   ggplot2::labs(
     x = "DBH (inches)",
-    y = "gross volume to 9/10\" top (board ft)",
+    y = "gross volume (board ft)",
     color = "species"
   )
 
 ```
 
 ### Biomass
+The publication outlines a process for obtaining estimates of green tons of
+biomass. This method differs from the methods used by FIA so keep that in mind
+if you are attempting to immitate the FIA methodology. The
+[FIA methods](https://www.nrs.fs.fed.us/pubs/39555) use the gross cubic foot
+volume equations and coefficients from this publication but use a different
+process for converting the bole volume estimate into biomass.
 
 ```{r biomass}
-trees_with_biomass <- test_trees %>%
-  dplyr::filter(!is.na(dbh)) %>%
+trees_with_biomass <- trees_prepped %>%
   dplyr::mutate(
     biomass = estimate_biomass(
       spcd = spcd,
       dbh = dbh,
       site_index = 65,
-      stand_basal_area = 75
+      stand_basal_area = bapa
     )
   )
 
 trees_with_biomass %>%
   ggplot2::ggplot(
-    ggplot2::aes(x = dbh, y = biomass, color = common_name)
+    ggplot2::aes(
+      x = dbh,
+      y = biomass,
+      color = common_name
+    )
   ) +
-  ggplot2::geom_point()
+  ggplot2::geom_point() +
+  ggplot2::labs(
+    x = "DBH (inches)",
+    y = "biomass (green tons)",
+    color = "species"
+  )
 ```
 
