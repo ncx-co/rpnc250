@@ -116,3 +116,11 @@
 #' }
 #' @source data-raw/test_trees.R
 "test_trees"
+
+#' ref_species
+#'
+#' ref_species table from USFS FIADB: see page 9-19 of FIADB 2.0 User Guide for
+#' description
+#' 
+#' @source data-raw/ref_species.R
+"ref_species"

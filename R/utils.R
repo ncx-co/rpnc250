@@ -14,10 +14,9 @@
 
 assign_species_group <- function(spcd) {
   # get hardwood/softwood for each species
-  ref_species <- tidyFIA::ref_tables[["species"]]
-
-  # get major species group of each tree
-  major_group <- ref_species$major_spgrpcd[match(spcd, ref_species$spcd)]
+  major_group <- rpnc250::ref_species$major_spgrpcd[
+    match(spcd, ref_species$spcd)
+    ]
 
   species_groups <- dplyr::case_when(
     spcd %in% species$spcd ~ species$species_group[match(spcd, species$spcd)],
