@@ -19,7 +19,8 @@ assign_species_group <- function(spcd) {
     ]
 
   species_groups <- dplyr::case_when(
-    spcd %in% species$spcd ~ species$species_group[match(spcd, species$spcd)],
+    spcd %in% rpnc250::species$spcd ~
+      species$species_group[match(spcd, species$spcd)],
     major_group %in% c(1, 2) ~ "Other softwoods",
     major_group %in% c(3, 4) ~ "Other hardwoods",
     TRUE ~ NA_character_
