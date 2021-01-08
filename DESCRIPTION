@@ -1,0 +1,34 @@
+Package: rpnc250
+Title: R implentation of USFS Research Paper NC-250: Tree Volume and Biomass
+    Equations for the Lake States
+Version: 0.1.0
+Authors@R: 
+    c(
+        person(
+            given = "Henry",
+            family = "Rodman",
+            role = c("aut", "cre"),
+            email = "henry@silviaterra.com"
+        ),
+        person("SilviaTerra", role = c("cph", "fnd"))
+    )
+Description: R implentation of USFS Research Paper NC-250: Tree Volume and
+    Biomass Equations for the Lake States. All equations and model coefficients
+    were copied out of the original publication accessed here:
+    https://www.nrs.fs.fed.us/pubs/rp/rp_nc250.pdf.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports:
+    assertthat,
+    dplyr
+Remotes:
+    SilviaTerra/tidyFIA
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Depends: 
+    R (>= 2.10)
+Suggests: 
+    testthat (>= 2.0.0),
+    covr
+Config/testthat/edition: 2

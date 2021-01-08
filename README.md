@@ -1,45 +1,37 @@
----
-output: github_document
----
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-```
 
 # rpnc250
 
 <!-- badges: start -->
+
 [![R-CMD-check](https://github.com/SilviaTerra/rpnc250/workflows/R-CMD-check/badge.svg)](https://github.com/SilviaTerra/rpnc250/actions)
-[![Codecov test coverage](https://codecov.io/gh/SilviaTerra/rpnc250/branch/main/graph/badge.svg)](https://codecov.io/gh/SilviaTerra/rpnc250?branch=main)
+[![Codecov test
+coverage](https://codecov.io/gh/SilviaTerra/rpnc250/branch/main/graph/badge.svg)](https://codecov.io/gh/SilviaTerra/rpnc250?branch=main)
 <!-- badges: end -->
 
-The goal of rpnc250 is to provide R functions that produce height, volume, and
-biomass estimates using the equations and coefficients from USFS Research Paper
-NC-250: Tree volume and biomass equations for the Lake States.
+The goal of rpnc250 is to provide R functions that produce height,
+volume, and biomass estimates using the equations and coefficients from
+USFS Research Paper NC-250: Tree volume and biomass equations for the
+Lake States.
 
-Citation for publication:
-Hahn, Jerold T. 1984. Tree volume and biomass equations for the Lake States. Research Paper NC-250. 
-St. Paul, MN: U.S. Dept. of Agriculture, Forest Service, North Central Forest Experiment Station
+Citation for publication: Hahn, Jerold T. 1984. Tree volume and biomass
+equations for the Lake States. Research Paper NC-250. St. Paul, MN: U.S.
+Dept. of Agriculture, Forest Service, North Central Forest Experiment
+Station
 
-The original publication can be accessed from the
-[U.S. Forest Service](https://www.fs.usda.gov/treesearch/pubs/10037).
+The original publication can be accessed from the [U.S. Forest
+Service](https://www.fs.usda.gov/treesearch/pubs/10037).
 
-The equations and species-specific coefficients were copied out of the PDF
-version of the publication by Henry Rodman in January 2021. The tables are
-[stored in csv format](inst/csv/) in the R package and have been
-[translated into package data objects](data-raw/tables.R) for use in the
-internal functions. 
+The equations and species-specific coefficients were copied out of the
+PDF version of the publication by Henry Rodman in January 2021. The
+tables are [stored in csv format](inst/csv/) in the R package and have
+been [translated into package data objects](data-raw/tables.R) for use
+in the internal functions.
 
 The functions for estimating height, volume, and biomass have been
-[tested](tests/testthat/test-eq.R) to align with the examples provided in the
-original publication.
+[tested](tests/testthat/test-eq.R) to align with the examples provided
+in the original publication.
 
 ## Installation
 
@@ -54,23 +46,34 @@ remotes::install_github("SilviaTerra/rpnc250")
 Here are some examples to show a few ways to work with the functions:
 
 First, load a few packages.
-```{r libs}
+
+``` r
 library(rpnc250)
 library(magrittr)
 ```
 
-The package has a set of test trees pulled from some FIA data in northern
-Minnesota ([source code](data-raw/test_trees.R)).
-```{r test_trees}
+The package has a set of test trees pulled from some FIA data in
+northern Minnesota ([source code](data-raw/test_trees.R)).
+
+``` r
 head(test_trees)
+#> # A tibble: 6 x 9
+#>   cn        plt_cn     statuscd  spcd common_name   dbh tpa_unadj    ht volcfgrs
+#>   <chr>     <chr>         <int> <dbl> <chr>       <dbl>     <dbl> <int>    <dbl>
+#> 1 65340991… 653408940…        1    95 black spru…   1.5      75.0    NA       NA
+#> 2 65340995… 653408940…        1    95 black spru…   1.5      75.0    NA       NA
+#> 3 65340999… 653408940…        1    95 black spru…   2.8      75.0    NA       NA
+#> 4 65341003… 653408940…        1    95 black spru…   1.9      75.0    NA       NA
+#> 5 65341007… 653408940…        1    95 black spru…   2.7      75.0    NA       NA
+#> 6 65341011… 653408940…        1    95 black spru…   2        75.0    NA       NA
 ```
 
 The height equation includes stand basal area as a covariate, so we can
-summarize FIA plot-level (four subplots combined) basal area to use for that
-purpose. For simplicity, we will assume that site index is constant for all of
-the plot locations.
+summarize FIA plot-level (four subplots combined) basal area to use for
+that purpose. For simplicity, we will assume that site index is constant
+for all of the plot locations.
 
-```{r basal_area}
+``` r
 # summarize plot-level basal area
 plot_ba <- test_trees %>%
   dplyr::filter(
@@ -100,12 +103,15 @@ trees_prepped <- test_trees %>%
 ```
 
 ### Merchantable height
-The height equation in the publication generates estimates of height to a given
-top diameter (outside bark) provided species, DBH (inches), site index, and
-stand basal area.
 
-To estimate height to 4" top we can apply the function `estimate_height`:
-```{r height}
+The height equation in the publication generates estimates of height to
+a given top diameter (outside bark) provided species, DBH (inches), site
+index, and stand basal area.
+
+To estimate height to 4" top we can apply the function
+`estimate_height`:
+
+``` r
 # clone prepped tree dataframe
 ht_trees <- trees_prepped
 
@@ -118,9 +124,10 @@ ht_trees$height_4 <- estimate_height(
 )
 ```
 
-It is also possible to use the functions within `dplyr::mutate` calls which
-facilitates clean data wrangling workflows.
-```{r height_tidy}
+It is also possible to use the functions within `dplyr::mutate` calls
+which facilitates clean data wrangling workflows.
+
+``` r
 
 ht_trees <- trees_prepped %>%
   dplyr::mutate(
@@ -132,15 +139,16 @@ ht_trees <- trees_prepped %>%
       stand_basal_area = bapa
     )
   )
-
 ```
 
 ### Cubic feet
-We can summarize total merchantable volume up to 4" top very easily. First, join
-the plot-level basal area table to the tree table, then estimate height to 4"
-top for each stem. Using those estimates as inputs to the volume equations we
-can estimate stem-level volumes.
-```{r cuft}
+
+We can summarize total merchantable volume up to 4" top very easily.
+First, join the plot-level basal area table to the tree table, then
+estimate height to 4" top for each stem. Using those estimates as inputs
+to the volume equations we can estimate stem-level volumes.
+
+``` r
 merch_cuft_4 <- trees_prepped %>%
   dplyr::mutate(
     height_4 = estimate_height(
@@ -173,15 +181,19 @@ merch_cuft_4 %>%
     y = "gross volume to 4\" top (cubic ft)",
     color = "species"
   )
+#> Warning: Removed 106 rows containing missing values (geom_point).
 ```
 
-### Board feet
-To get merchantable volume in board feet (Int'l 1/4) we can set the merchantable
-height to 9" for softwood trees, and 10" for hardwood trees. You and I both
-know that the large aspen are probably not destined for sawtimber products, but
-we can dream.
+<img src="man/figures/README-cuft-1.png" width="100%" />
 
-```{r bdft}
+### Board feet
+
+To get merchantable volume in board feet (Int’l 1/4) we can set the
+merchantable height to 9" for softwood trees, and 10" for hardwood
+trees. You and I both know that the large aspen are probably not
+destined for sawtimber products, but we can dream.
+
+``` r
 # make table of spcd and hardwood/softwood assignment
 spp_groups <- tidyFIA::ref_tables[["species"]] %>%
   dplyr::transmute(
@@ -236,18 +248,20 @@ merch_bdft %>%
     y = "gross volume (board ft)",
     color = "species"
   )
-
 ```
 
-### Biomass
-The publication outlines a process for obtaining estimates of green tons of
-biomass. This method differs from the methods used by FIA so keep that in mind
-if you are attempting to immitate the FIA methodology. The
-[FIA methods](https://www.nrs.fs.fed.us/pubs/39555) use the gross cubic foot
-volume equations and coefficients from this publication but use a different
-process for converting the bole volume estimate into biomass.
+<img src="man/figures/README-bdft-1.png" width="100%" />
 
-```{r biomass}
+### Biomass
+
+The publication outlines a process for obtaining estimates of green tons
+of biomass. This method differs from the methods used by FIA so keep
+that in mind if you are attempting to immitate the FIA methodology. The
+[FIA methods](https://www.nrs.fs.fed.us/pubs/39555) use the gross cubic
+foot volume equations and coefficients from this publication but use a
+different process for converting the bole volume estimate into biomass.
+
+``` r
 trees_with_biomass <- trees_prepped %>%
   dplyr::mutate(
     biomass = estimate_biomass(
@@ -274,3 +288,4 @@ trees_with_biomass %>%
   )
 ```
 
+<img src="man/figures/README-biomass-1.png" width="100%" />

@@ -1,0 +1,5 @@
+^README\.Rmd$
+^LICENSE\.md$
+^data-raw$
+^\.github$
+^codecov\.yml$
