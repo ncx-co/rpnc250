@@ -38,7 +38,7 @@ in the original publication.
 You can install the latest version of rpnc250 from Github with:
 
 ``` r
-remotes::install_github("SilviaTerra/rpnc250")
+remotes::install_github("SilviaTerra/rpnc250", ref = "main")
 ```
 
 ## Examples
@@ -57,15 +57,20 @@ northern Minnesota ([source code](data-raw/test_trees.R)).
 
 ``` r
 head(test_trees)
-#> # A tibble: 6 x 9
-#>   cn        plt_cn     statuscd  spcd common_name   dbh tpa_unadj    ht volcfgrs
-#>   <chr>     <chr>         <int> <dbl> <chr>       <dbl>     <dbl> <int>    <dbl>
-#> 1 65340991… 653408940…        1    95 black spru…   1.5      75.0    NA       NA
-#> 2 65340995… 653408940…        1    95 black spru…   1.5      75.0    NA       NA
-#> 3 65340999… 653408940…        1    95 black spru…   2.8      75.0    NA       NA
-#> 4 65341003… 653408940…        1    95 black spru…   1.9      75.0    NA       NA
-#> 5 65341007… 653408940…        1    95 black spru…   2.7      75.0    NA       NA
-#> 6 65341011… 653408940…        1    95 black spru…   2        75.0    NA       NA
+#>               cn         plt_cn statuscd spcd  common_name dbh tpa_unadj ht
+#> 1 65340991010661 65340894010661        1   95 black spruce 1.5  74.96528 NA
+#> 2 65340995010661 65340894010661        1   95 black spruce 1.5  74.96528 NA
+#> 3 65340999010661 65340894010661        1   95 black spruce 2.8  74.96528 NA
+#> 4 65341003010661 65340894010661        1   95 black spruce 1.9  74.96528 NA
+#> 5 65341007010661 65340894010661        1   95 black spruce 2.7  74.96528 NA
+#> 6 65341011010661 65340894010661        1   95 black spruce 2.0  74.96528 NA
+#>   volcfgrs
+#> 1       NA
+#> 2       NA
+#> 3       NA
+#> 4       NA
+#> 5       NA
+#> 6       NA
 ```
 
 The height equation includes stand basal area as a covariate, so we can

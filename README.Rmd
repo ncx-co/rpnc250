@@ -46,7 +46,7 @@ original publication.
 You can install the latest version of rpnc250 from Github with:
 
 ``` r
-remotes::install_github("SilviaTerra/rpnc250")
+remotes::install_github("SilviaTerra/rpnc250", ref = "main")
 ```
 
 ## Examples
