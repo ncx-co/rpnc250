@@ -22,8 +22,6 @@ LazyData: true
 Imports:
     assertthat,
     dplyr
-Remotes:
-    SilviaTerra/tidyFIA
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Depends: 
